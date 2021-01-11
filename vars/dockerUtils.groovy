@@ -93,25 +93,29 @@ def buildImageStage(image) {
     stage(taskname) {
       node(PipelineConfig.instance.dockerNodeLabel) {
         echo "Starting ${env.STAGE_NAME} on ${env.NODE_NAME}"
-        docker.withRegistry("https://${PipelineConfig.instance.registry}",
-                          'docker-hub-elektra-jenkins') {
-          checkout scm
-          def uid = getUid()
-          def gid = getGid()
-          def cpus = cpuCount()
-          def i = docker.build(
-            image.id,"""\
+        checkout scm
+        buildImage(image)
+      }
+    }
+  }]
+}
+
+def buildImage(image) {
+  docker.withRegistry("https://${PipelineConfig.instance.registry}",
+                  'docker-hub-elektra-jenkins') {
+    def uid = getUid()
+    def gid = getGid()
+    def cpus = cpuCount()
+    def i = docker.build(
+      image.id,"""\
 --pull \
 --build-arg JENKINS_GROUPID=${gid} \
 --build-arg JENKINS_USERID=${uid} \
 --build-arg PARALLEL=${cpus} \
 -f ${image.file} ${image.context}"""
-          )
-          i.push()
-        }
-      }
-    }
-  }]
+    )
+    i.push()
+  }
 }
 
 /* Build image ID of docker images used for tests
