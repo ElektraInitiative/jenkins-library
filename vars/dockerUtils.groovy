@@ -133,11 +133,11 @@ def idTesting(imageMap) {
   return imageMap
 }
 
-/* Build id for website
+/* Build id for artifact images (website, webui, images with installed elektra)
  *
  * @param imageMap Map identifying an docker image
  */
-def idWebsite(imageMap) {
+def idArtifact(imageMap) {
   imageMap.id = "${imageMap.name}:${BRANCH_NAME}_${BUILD_NUMBER}"
   return imageMap
 }
