@@ -138,7 +138,7 @@ def idTesting(imageMap) {
  * @param imageMap Map identifying an docker image
  */
 def idArtifact(imageMap) {
-  imageMap.id = "${imageMap.name}:${env.BRANCH_NAME}_${env.BUILD_NUMBER}"
+  imageMap.id = "${imageMap.name}:${env.JOB_NAME}_${env.BUILD_NUMBER}"
   return imageMap
 }
 
