@@ -6,7 +6,9 @@
  * are not docker and release related
  */
 
-/* Run cmake
+/**
+ *  Run cmake
+ *
  * @param directory Basedir for cmake
  * @param argsMap Map of arguments for cmake
  */
@@ -19,7 +21,8 @@ def cmake(String directory, Map argsMap) {
 }
 
 
-/* Archives files located in paths
+/**
+ *  Archives files located in paths
  *
  * Automatically prefixes with the current STAGE_NAME to identify where the
  * file was created.

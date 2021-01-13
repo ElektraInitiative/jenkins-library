@@ -5,13 +5,14 @@
  * This file contains shared methods for package releases
  */
 
-/** Publish all rpm packages and updates the repo
+/** Publish all DEB packages and updates the repo
  *
  * Also deletes older versions from the repo.
  * @param remote where the repository is located
  * @param remotedir must match with the directory tree inside the remote
  * @param repoName name of the repository
  * @param repoPrefix prefix of the repository
+ * @param releaseVersion version of the package without the revision postfix
  * @param packageRevision revision number of the package
  */
 def publishDebPackages(remote, remotedir, repoName, repoPrefix,
@@ -23,11 +24,11 @@ def publishDebPackages(remote, remotedir, repoName, repoPrefix,
         configName: remote,
         transfers: [
           sshTransfer(
-            sourceFiles: '*.d*eb',
+            sourceFiles: '*.deb',
             remoteDirectory: remotedir
           ),
           sshTransfer(
-            sourceFiles: '*.tar.gz',
+            sourceFiles: '*.ddeb',
             remoteDirectory: remotedir
           )
         ]
@@ -37,7 +38,7 @@ def publishDebPackages(remote, remotedir, repoName, repoPrefix,
   )
 
   // This step is necessary since running the commands to update
-  // the aptly repo directly in the `exeecCommand` results in
+  // the aptly repo directly in the `execCommand` results in
   // invalid interpolation behaviour of `$Version` which is
   // caused by Grovvys GString.
   // Escaping could not solve this issue.
@@ -63,15 +64,18 @@ ${repoName} ${repoPrefix} ${releaseVersion} ${packageRevision}"""
   }
 }
 
-/** Publish all rpm packages and updates the repo
+/** Publish all RPM packages and updates the repo
  *
  * Also deletes older versions from the repo.
  * @param remote where the repository is located
  * @param remotedir must match with the directory tree inside the remote
  * @param repoName name of the repository
+ * @param repoPrefix prefix of the repository
+ * @param releaseVersion version of the package without the revision postfix
  * @param packageRevision revision number of the package
  */
-def publishRpmPackages(remote, remotedir, repoName, packageRevision='1') {
+def publishRpmPackages(remote, remotedir, repoName, repoPrefix,
+                       releaseVersion, packageRevision='1') { // TODO: add missing params do docu
   sshPublisher(
     publishers: [
       sshPublisherDesc(
@@ -88,10 +92,6 @@ createrepo /srv/rpm-repo/${repoName}/ && \
 rm -rf /srv/rpm-repo/${repoName}/repodata/repomd.xml.asc && \
 gpg2 --detach-sign --armor -u A9A25CC1CC83E839 --pinentry-mode=loopback --batch --passphrase-file \
 /home/jenkins/.aptly/secret /srv/rpm-repo/${repoName}/repodata/repomd.xml"""
-          ),
-          sshTransfer(
-            sourceFiles: '*.tar.gz',
-            remoteDirectory: remotedir
           )
         ]
       )

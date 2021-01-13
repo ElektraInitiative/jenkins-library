@@ -18,6 +18,7 @@ def generateDockerPullStages(dockerImages) {
   return tasks
 }
 
+/* Generate Stages to build all docker images */
 def generateDockerBuildStages(dockerImages) {
   def tasks = [:]
   dockerImages.each { key, image ->
@@ -28,12 +29,13 @@ def generateDockerBuildStages(dockerImages) {
   return tasks
 }
 
-/* Create a new Docker Image description
+/**
+ *Create a new Docker Image description
  *
  * @param name Name of the image, will be extended with registry, a common
  *             prefix and a tag
  * @param idFun Closure describing how the image id should be formatted
- *                      (see idTesting() / idWebsite())
+ *                      (see idTesting() / idArtifact())
  * @param context Build context for the docker build (base directory that will
  *                be sent to the docker agent). Relative to the current working
  *                directory.
@@ -55,7 +57,8 @@ def createDockerImageDesc(name, idFun, context, file, autobuild=true) {
   return idFun(map)
 }
 
-/* Returns a stage that tries to pull an image
+/**
+ *  Returns a stage that tries to pull an image
  *
  * Also sets IMAGES_TO_BUILD to true if an image can not be found
  * to indicated that rebuilds are needed
@@ -83,7 +86,8 @@ def pullImageStage(image) {
   }]
 }
 
-/* Returns a map with a closure that builds image
+/**
+ * Returns a stage in which a docker image is built
  *
  * @param image Image that needs to be build
  */
@@ -100,6 +104,11 @@ def buildImageStage(image) {
   }]
 }
 
+/**
+ * Builds docker image and pushes to registry
+ *
+ * @param image Image that needs to be build
+ */
 def buildImage(image) {
   docker.withRegistry("https://${PipelineConfig.instance.registry}",
                   'docker-hub-elektra-jenkins') {
@@ -118,7 +127,8 @@ def buildImage(image) {
   }
 }
 
-/* Build image ID of docker images used for tests
+/**
+ *  Build image ID of docker images used for tests
  *
  * We use identifiers in the form of name:yyyyMM-hash
  * The hash is build from reading the Dockerfile. Hence it needs to be
@@ -133,7 +143,8 @@ def idTesting(imageMap) {
   return imageMap
 }
 
-/* Build id for artifact images (website, webui, images with installed elektra)
+/**
+ *  Build id for artifact images (website, webui, images with installed elektra)
  *
  * @param imageMap Map identifying an docker image
  */
@@ -142,7 +153,8 @@ def idArtifact(imageMap) {
   return imageMap
 }
 
-/* Format the date input
+/**
+ *  Format the date input
  * @param date Date to format
  */
 def dateFormatter(date) {
@@ -150,7 +162,9 @@ def dateFormatter(date) {
   return df.format(date)
 }
 
-/* Generate the checksum of a file
+/**
+ *  Generate the checksum of a file
+ *
  * @param file File to generate a checksum for
  */
 def checksum(file) {
@@ -162,19 +176,22 @@ def checksum(file) {
          .trim()
 }
 
-/* Get the current users uid
+/**
+ *  Get the current users uid
  */
 def getUid() {
   return sh(returnStdout: true, script: 'id -u').trim()
 }
 
-/* Get the current users gid
+/**
+ *  Get the current users gid
  */
 def getGid() {
   return sh(returnStdout: true, script: 'id -g').trim()
 }
 
-/* Get cpu count
+/**
+ *  Get cpu count
  */
 def cpuCount() {
   return sh(returnStdout: true,

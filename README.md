@@ -1,4 +1,4 @@
-# Jenkins shared library
+# Jenkins shared library - 🏗 STILL UNDER DEVELOPMENT 🏗
 
 This is the jenkins shared library used by Elektra.
 
