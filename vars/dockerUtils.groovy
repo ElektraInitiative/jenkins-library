@@ -149,7 +149,9 @@ def idTesting(imageMap) {
  * @param imageMap Map identifying an docker image
  */
 def idArtifact(imageMap) {
-  imageMap.id = "${imageMap.name}:${env.JOB_NAME}_${env.BUILD_NUMBER}"
+  def jobName = env.JOB_NAME
+  def escapedJobName = jobName.replaceAll('/', '_') // docker version tag may not include a `/`
+  imageMap.id = "${imageMap.name}:${escapedJobName}_${env.BUILD_NUMBER}"
   return imageMap
 }
 
