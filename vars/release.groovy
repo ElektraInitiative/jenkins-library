@@ -75,7 +75,7 @@ ${repoName} ${repoPrefix} ${releaseVersion} ${packageRevision}"""
  * @param packageRevision revision number of the package
  */
 def publishRpmPackages(remote, remotedir, repoName, repoPrefix,
-                       releaseVersion, packageRevision='1') { // TODO: add missing params do docu
+                       releaseVersion, packageRevision='1') {
   sshPublisher(
     publishers: [
       sshPublisherDesc(

@@ -1,4 +1,4 @@
-# Jenkins shared library - 🏗 STILL UNDER DEVELOPMENT 🏗
+# Jenkins Shared Library
 
 This is the jenkins shared library used by Elektra.
 
@@ -10,11 +10,11 @@ Name: libelektra-shared # this name is used in the Jenkinsfiles
 Default version: master # set the default version to the master branch
 Load implicitly: false # we do not want the library to be loaded implicitly, only with @Library
 Allow default version to be overridden: true # necessary so that branches or forks can test their version
-Include @Library changes in job recent changes: false # if this would be set to true, all open PR's would be restartet
+Include @Library changes in job recent changes: false # if this would be set to true, all open PR's would be restarted
 ```
 
 ## Usage
-If you want to use this library in a Jenkinsfile, import the Library with the `@Library` annotion.
+If you want to use this library in a Jenkinsfile, import the Library with the `@Library` annotation.
 Following imports the default version (master branch) of this library:
 
 ```groovy
@@ -26,7 +26,7 @@ Default values exist for `dockerNodeLabel` and `registry`. The current date `now
 
 ```groovy
 pipelineConfig {
-// uncomment if you you want to overwrite these values
+// uncomment if you want to overwrite these values
 // dockerNodeLabel = 'docker'
 // registry = 'hub.libelektra.org'
   now = new Date()
