@@ -14,9 +14,13 @@
  * @param repoPrefix prefix of the repository
  * @param releaseVersion version of the package without the revision postfix
  * @param packageRevision revision number of the package
+ * @param projectBaseDirPrefix directory after ${WORKSPACE} until project directory
+ *                             Defaults to "" for the case that project is checked out
+ *                             in current directory
  */
 def publishDebPackages(remote, remotedir, repoName, repoPrefix,
-                       releaseVersion, packageRevision='1') {
+                       releaseVersion, packageRevision='1',
+                       projectBaseDirPrefix="") {
   sshPublisher(
     publishers: [
       sshPublisherDesc(
@@ -42,7 +46,7 @@ def publishDebPackages(remote, remotedir, repoName, repoPrefix,
   // invalid interpolation behaviour of `$Version` which is
   // caused by Grovvys GString.
   // Escaping could not solve this issue.
-  dir("${WORKSPACE}/scripts/release/") {
+  dir("${WORKSPACE}/${projectBaseDirPrefix}/scripts/release/") {
     sshPublisher(
       publishers: [
         sshPublisherDesc(
@@ -73,9 +77,11 @@ ${repoName} ${repoPrefix} ${releaseVersion} ${packageRevision}"""
  * @param repoPrefix prefix of the repository
  * @param releaseVersion version of the package without the revision postfix
  * @param packageRevision revision number of the package
+ * @param projectBaseDirPrefix directory after ${WORKSPACE} until project directory
  */
-def publishRpmPackages(remote, remotedir, repoName, repoPrefix,
-                       releaseVersion, packageRevision='1') {
+def publishRpmPackages(remote, remotedir, repoName, repoPrefix=null,
+                       releaseVersion=null, packageRevision='1',
+                       projectBaseDirPrefix="") {
   sshPublisher(
     publishers: [
       sshPublisherDesc(
