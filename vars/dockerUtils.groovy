@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 def generateDockerPullStages(dockerImages) {
   def tasks = [:]
   dockerImages.each { key, image ->
-    if(image.autobuild) {
+    if (image.autobuild) {
       tasks << pullImageStage(image)
     }
   }
@@ -22,7 +22,7 @@ def generateDockerPullStages(dockerImages) {
 def generateDockerBuildStages(dockerImages) {
   def tasks = [:]
   dockerImages.each { key, image ->
-    if(image.autobuild && !image.exists) {
+    if (image.autobuild && !image.exists) {
       tasks << buildImageStage(image)
     }
   }
@@ -74,10 +74,10 @@ def pullImageStage(image) {
                             'docker-hub-elektra-jenkins') {
           try {
             docker.image(image.id).pull()
-            echo "Found existing image"
+            echo 'Found existing image'
             image.exists = true
-          } catch(e) {
-            echo "Detected changes"
+          } catch (e) {
+            echo 'Detected changes'
             image.exists = false
           }
         }
@@ -160,7 +160,7 @@ def idArtifact(imageMap) {
  * @param date Date to format
  */
 def dateFormatter(date) {
-  df = new SimpleDateFormat("yyyyMM")
+  df = new SimpleDateFormat('yyyyMM')
   return df.format(date)
 }
 

@@ -11,7 +11,7 @@
  *               after the Closure `cl` is run inside the docker image.
  * @param cl A closure that should be run inside the docker image
  */
-def call(image, opts=[], postCl={}, cl) {
+def call(image, opts=[], postCl= { }, cl) {
   node(PipelineConfig.instance.dockerNodeLabel) {
     withDockerEnvWithoutNode(image, opts, postCl, cl)
   }
@@ -29,13 +29,13 @@ def call(image, opts=[], postCl={}, cl) {
  *               after the Closure `cl` is run inside the docker image.
  * @param cl A closure that should be run inside the docker image
  */
-def withDockerEnvWithoutNode(image, opts=[], postCl={}, cl) {
-  def dockerArgs = ""
+def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
+  def dockerArgs = ''
   if (opts.contains(DockerOpts.MOUNT_MIRROR)) {
     dockerArgs += "-v ${env.HOME}/git_mirrors:/home/jenkins/git_mirrors "
   }
   if (opts.contains(DockerOpts.PTRACE)) {
-    dockerArgs += "--cap-add SYS_PTRACE "
+    dockerArgs += '--cap-add SYS_PTRACE '
   }
   docker.withRegistry("https://${PipelineConfig.instance.registry}",
                       'docker-hub-elektra-jenkins') {

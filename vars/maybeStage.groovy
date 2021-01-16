@@ -8,7 +8,7 @@
  * @param body Closure representing stage body
  */
 def call(String name, boolean expression, Closure body) {
-  if(expression) {
+  if (expression) {
     stage(name, body)
   } else {
     stage(name) {

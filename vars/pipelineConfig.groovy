@@ -5,7 +5,7 @@
  * Delegates closure body to be executed in context of PipelineConfig object.
  */
 def call(Closure body) {
-    body.resolveStrategy = Closure.DELEGATE_FIRST
-    body.delegate = PipelineConfig.instance
-    body()
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = PipelineConfig.instance
+  body()
 }

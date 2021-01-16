@@ -20,7 +20,7 @@
  */
 def publishDebPackages(remote, remotedir, repoName, repoPrefix,
                        releaseVersion, packageRevision='1',
-                       projectBaseDirPrefix="") {
+                       projectBaseDirPrefix='') {
   sshPublisher(
     publishers: [
       sshPublisherDesc(
@@ -81,7 +81,7 @@ ${repoName} ${repoPrefix} ${releaseVersion} ${packageRevision}"""
  */
 def publishRpmPackages(remote, remotedir, repoName, repoPrefix=null,
                        releaseVersion=null, packageRevision='1',
-                       projectBaseDirPrefix="") {
+                       projectBaseDirPrefix='') {
   sshPublisher(
     publishers: [
       sshPublisherDesc(

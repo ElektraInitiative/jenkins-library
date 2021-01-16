@@ -3,7 +3,9 @@
  */
 @Singleton
 class PipelineConfig {
-    String 	dockerNodeLabel = 'docker'
-    String registry = 'hub.libelektra.org'
-    Date now
+
+  String dockerNodeLabel = 'docker'
+  String registry = 'hub.libelektra.org'
+  Date now
+
 }

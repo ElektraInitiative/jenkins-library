@@ -13,13 +13,12 @@
  * @param argsMap Map of arguments for cmake
  */
 def cmake(String directory, Map argsMap) {
-  def argsStr = ""
+  def argsStr = ''
   argsMap.each { key, value ->
     argsStr += "-D$key=\"$value\" "
   }
   sh("cmake $argsStr $directory")
 }
-
 
 /**
  *  Archives files located in paths
@@ -29,9 +28,9 @@ def cmake(String directory, Map argsMap) {
  * @param paths List of paths to be archived
  */
 def archive(paths) {
-  echo "Start archivation"
+  echo 'Start archivation'
   if (paths) {
-    def prefix = "artifacts/"
+    def prefix = 'artifacts/'
     def dest = "${prefix}${env.STAGE_NAME}/"
     sh "mkdir -p ${dest}"
     paths.each { path ->
@@ -41,7 +40,7 @@ def archive(paths) {
                      fingerprint: true,
                      allowEmptyArchive: true
   } else {
-    echo "No Artifacts to archive"
+    echo 'No Artifacts to archive'
   }
-  echo "Finish archivation"
+  echo 'Finish archivation'
 }
