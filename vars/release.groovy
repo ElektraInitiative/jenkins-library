@@ -92,7 +92,7 @@ def publishRpmPackages(remote, remotedir, repoName, repoPrefix=null,
             sourceFiles: '*.rpm',
             remoteDirectory: remotedir,
             execCommand: """\
-rm -rf /srv/rpm-repo/${repoName}/packages/*.rpm && \
+rm -rf /srv/rpm-repo/${repoName}/packages/*.rpm && mkdir -p /srv/rpm-repo/${repoName}/packages/ && \
 mv /srv/libelektra/packaging/incoming/${repoName}/*.rpm /srv/rpm-repo/${repoName}/packages/ && \
 createrepo /srv/rpm-repo/${repoName}/ && \
 rm -rf /srv/rpm-repo/${repoName}/repodata/repomd.xml.asc && \
