@@ -47,6 +47,12 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
                "XDG_CONFIG_DIRS=${WORKSPACE}/xdg/system"]) {
         echo "Starting ${STAGE_NAME} on ${NODE_NAME} using ${image.id}"
         checkout scm
+        try {
+            // Try pre-pulling the image once to avoid temporary docker hub errors
+            docker.image(image.id).pull()
+        } catch (Exception ex) {
+            sleep 30
+        }
         docker.image(image.id)
               .inside(dockerArgs) { cl() }
       }
