@@ -105,3 +105,49 @@ gpg2 --detach-sign --armor -u A9A25CC1CC83E839 --pinentry-mode=loopback --batch 
     failOnError: true
   )
 }
+
+/**
+ * Deploy the libelektra.org website
+ *
+ * @param  image must be the previously built website image (and be one of DOCKER_IMAGES)
+ * @return stage
+ */
+def deployWebsite(image) {
+  def stageName = 'deployWebsite'
+  return [(stageName): {
+    stage(stageName) {
+      withDockerEnv(image) {
+            sh "ls -al /usr/local/share/elektra/tool_data/website/public/"
+            sh "cp -Rf /usr/local/share/elektra/tool_data/website ."
+            sshPublisher(
+                publishers: [
+                  sshPublisherDesc(
+                    verbose: true,
+                    configName: 'doc.libelektra.org',
+                    transfers: [
+                      sshTransfer(
+                        execCommand: 'rm -Rf /srv/libelektra/website/public_old; cp -Rfpv /srv/libelektra/website/public /srv/libelektra/website/public_old'
+                      )
+                    ]
+                  )
+                ]
+              )
+            sshPublisher(
+                publishers: [
+                  sshPublisherDesc(
+                    verbose: true,
+                    configName: 'doc.libelektra.org',
+                    transfers: [
+                      sshTransfer(
+                        sourceFiles: 'website/public/**/*',
+                        removePrefix: 'website',
+                        remoteDirectory: 'website'
+                      )
+                    ]
+                  )
+                ]
+              )
+      }
+    }
+  }]
+}
