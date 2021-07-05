@@ -39,7 +39,7 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
   }
   docker.withRegistry("https://${PipelineConfig.instance.registry}",
                       'docker-hub-elektra-jenkins') {
-    timeout(activity: true, time: 40, unit: 'MINUTES') {
+    timeout(activity: true, time: 60, unit: 'MINUTES') {
       def cpu_count = dockerUtils.cpuCount()
       withEnv(["MAKEFLAGS='-j${cpu_count+2} -l${cpu_count*2}'",
                "CTEST_PARALLEL_LEVEL='${cpu_count+2}'",
