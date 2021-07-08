@@ -39,7 +39,7 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
   }
   docker.withRegistry("https://${PipelineConfig.instance.registry}",
                       'docker-hub-elektra-jenkins') {
-    timeout(activity: true, time: 40, unit: 'MINUTES') {
+    timeout(activity: true, time: 60, unit: 'MINUTES') {
       def cpu_count = dockerUtils.cpuCount()
       withEnv(["MAKEFLAGS='-j${cpu_count+2} -l${cpu_count*2}'",
                "CTEST_PARALLEL_LEVEL='${cpu_count+2}'",
@@ -47,6 +47,12 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
                "XDG_CONFIG_DIRS=${WORKSPACE}/xdg/system"]) {
         echo "Starting ${STAGE_NAME} on ${NODE_NAME} using ${image.id}"
         checkout scm
+        try {
+            // Try pre-pulling the image once to avoid temporary docker hub errors
+            docker.image(image.id).pull()
+        } catch (Exception ex) {
+            sleep 30
+        }
         docker.image(image.id)
               .inside(dockerArgs) { cl() }
       }
