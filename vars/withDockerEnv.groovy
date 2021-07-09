@@ -48,7 +48,9 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
                "XDG_CONFIG_HOME=${WORKSPACE}/xdg/user",
                "XDG_CONFIG_DIRS=${WORKSPACE}/xdg/system"]) {
         echo "Starting ${STAGE_NAME} on ${NODE_NAME} using ${image.id}"
-        checkout scm
+        if (!opts.contains(DockerOpts.NO_CHECKOUT)) {
+            checkout scm
+        }
         try {
             // Try pre-pulling the image once to avoid temporary docker hub errors
             docker.image(image.id).pull()
