@@ -37,8 +37,10 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
   if (opts.contains(DockerOpts.PTRACE)) {
     dockerArgs += '--cap-add SYS_PTRACE '
   }
-  dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/xdg,tmpfs-mode=1777 "
-  dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/config,tmpfs-mode=1777 "
+  def uid = getUid()
+  def gid = getGid()
+  dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/xdg,uid=${uid},gid=${gid} "
+  dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/config,uid=${uid},gid=${gid} "
   docker.withRegistry("https://${PipelineConfig.instance.registry}",
                       'docker-hub-elektra-jenkins') {
     timeout(activity: true, time: 60, unit: 'MINUTES') {
