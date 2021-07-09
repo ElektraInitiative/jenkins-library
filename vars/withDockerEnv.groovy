@@ -39,8 +39,8 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
   }
   def uid = dockerUtils.getUid()
   def gid = dockerUtils.getGid()
-  dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/xdg,uid=${uid},gid=${gid} "
-  dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/config,uid=${uid},gid=${gid} "
+  dockerArgs += " --tmpfs=${WORKSPACE}/xdg:rw,mode=777,uid=${uid},gid=${gid} "
+  dockerArgs += " --tmpfs=${WORKSPACE}/config:rw,mode=777,uid=${uid},gid=${gid} "
   docker.withRegistry("https://${PipelineConfig.instance.registry}",
                       'docker-hub-elektra-jenkins') {
     timeout(activity: true, time: 60, unit: 'MINUTES') {
