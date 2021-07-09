@@ -37,8 +37,8 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
   if (opts.contains(DockerOpts.PTRACE)) {
     dockerArgs += '--cap-add SYS_PTRACE '
   }
-  def uid = getUid()
-  def gid = getGid()
+  def uid = dockerUtils.getUid()
+  def gid = dockerUtils.getGid()
   dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/xdg,uid=${uid},gid=${gid} "
   dockerArgs += " --mount type=tmpfs,destination=${WORKSPACE}/config,uid=${uid},gid=${gid} "
   docker.withRegistry("https://${PipelineConfig.instance.registry}",
