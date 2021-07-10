@@ -67,5 +67,7 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
     }
   }
   postCl()
-  // cleanWs()
+  if (!opts.contains(DockerOpts.NO_CLEANUP)) {
+      cleanWs()
+  }
 }
