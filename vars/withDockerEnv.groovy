@@ -39,6 +39,7 @@ def withDockerEnvWithoutNode(image, opts=[], postCl= { }, cl) {
   }
   def uid = dockerUtils.getUid()
   def gid = dockerUtils.getGid()
+  dockerArgs += " --tmpfs=/tmp:rw,mode=777,uid=${uid},gid=${gid} "
   dockerArgs += " --tmpfs=/home/jenkins/.config:rw,mode=777,uid=${uid},gid=${gid} "
   dockerArgs += " --tmpfs=/home/jenkins/.cache/elektra:rw,mode=777,uid=${uid},gid=${gid} "
   dockerArgs += " --tmpfs=${WORKSPACE}/xdg:rw,mode=777,uid=${uid},gid=${gid} "
