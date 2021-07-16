@@ -115,6 +115,8 @@ def buildImage(image) {
     def uid = getUid()
     def gid = getGid()
     def cpus = cpuCount()
+    // use BuildKit for --mount feature in Dockerfiles
+    sh "export DOCKER_BUILDKIT=1"
     def i = docker.build(
       image.id,"""\
 --pull \
