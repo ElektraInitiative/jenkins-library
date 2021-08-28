@@ -94,7 +94,7 @@ def publishRpmPackages(remote, remotedir, repoName, repoPrefix=null,
             execCommand: """\
 rm -rf /srv/rpm-repo/${repoName}/packages/*.rpm && mkdir -p /srv/rpm-repo/${repoName}/packages/ && \
 mv /srv/libelektra/packaging/incoming/${repoName}/*.rpm /srv/rpm-repo/${repoName}/packages/ && \
-createrepo /srv/rpm-repo/${repoName}/ && \
+createrepo_c /srv/rpm-repo/${repoName}/ && \
 rm -rf /srv/rpm-repo/${repoName}/repodata/repomd.xml.asc && \
 gpg2 --detach-sign --armor -u A9A25CC1CC83E839 --pinentry-mode=loopback --batch --passphrase-file \
 /home/jenkins/.aptly/secret /srv/rpm-repo/${repoName}/repodata/repomd.xml"""
