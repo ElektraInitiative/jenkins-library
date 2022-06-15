@@ -115,12 +115,15 @@ def buildImage(image) {
     def uid = getUid()
     def gid = getGid()
     def cpus = cpuCount()
+    def pipeline_tag = tagArtifact()
+
     def i = docker.build(
       image.id,"""\
 --pull \
 --build-arg JENKINS_GROUPID=${gid} \
 --build-arg JENKINS_USERID=${uid} \
 --build-arg PARALLEL=${cpus} \
+--build-arg PIPELINE_TAG=${pipeline_tag} \
 -f ${image.file} ${image.context}"""
     )
     i.push()
@@ -144,14 +147,22 @@ def idTesting(imageMap) {
 }
 
 /**
+ * Get unique docker tag for this pipeline run.
+ */
+def tagArtifact() {
+  def jobName = env.JOB_NAME
+  def escapedJobName = jobName.replaceAll('/', '_') // docker version tag may not include a `/`
+  return "${escapedJobName}_${env.BUILD_NUMBER}"
+}
+
+/**
  *  Build id for artifact images (website, webui, images with installed elektra)
  *
  * @param imageMap Map identifying an docker image
  */
 def idArtifact(imageMap) {
-  def jobName = env.JOB_NAME
-  def escapedJobName = jobName.replaceAll('/', '_') // docker version tag may not include a `/`
-  imageMap.id = "${imageMap.name}:${escapedJobName}_${env.BUILD_NUMBER}"
+  pipeline_tag = tagArtifact()
+  imageMap.id = "${imageMap.name}:${pipeline_tag}"
   return imageMap
 }
 
