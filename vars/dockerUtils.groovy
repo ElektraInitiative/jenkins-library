@@ -120,6 +120,7 @@ def buildImage(image) {
     def i = docker.build(
       image.id,"""\
 --pull \
+--squash \
 --build-arg JENKINS_GROUPID=${gid} \
 --build-arg JENKINS_USERID=${uid} \
 --build-arg PARALLEL=${cpus} \
